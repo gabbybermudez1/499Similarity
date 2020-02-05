@@ -1,12 +1,9 @@
-import math
-
-
 
 #TODO: Consider whether adding punctuation removal will help
 def clean_text(text):
     """
     Takes in a piece of text and eliminates unnecessary features such as capitalization, trailing or leading 
-    whitespaces, and spaces between woerds. This is the first step in the winnowing algorithm.
+    whitespaces, and spaces between words. 
 
     Parameters
     ----------
@@ -18,54 +15,23 @@ def clean_text(text):
     cleaned_text : str
         String that is the same as the input text but with the unnecessary features removed.
     """
-
     cleaned_text = text.lower()
     cleaned_text= cleaned_text.replace(" ", "") #remove whitespace
     cleaned_text= cleaned_text.replace("\n", "") #remove the newline character
     return cleaned_text
 
 
-# DEPRECATED
-def return_k_grams(text, k):
-    """
-    Takes in a string and returns the list of k grams that can be derived from that text. 
-    
-    Ex: If the text is HelloWorld and we want to derive the various 5-grams, we end up with:
-
-    [Hello, elloW, lloWo, loWor, oWorl, World] 
-
-
-    Note this will also come in handy when selecting further windows. 
-
-    Parameters
-    ----------
-    k : int
-        This represents how big our k gram is 
-
-    text : str
-        This is the string that we want to derive k-grams for
-    
-    Returns
-    -------
-    k-grams : list of str
-        This is a list of a strings where each string in the array is a k-gram
-    """
-    k = math.floor(k) # make sure k is an integer
-    #start and end index give us a handle of what character from the text to start and end slicing
-    start_index = 0
-    end_index = k
-    k_grams = []
-    while(end_index != len(text) + 1):
-        k_grams.append(text[start_index: end_index])
-        start_index += 1
-        end_index += 1
-    return k_grams
 
 # TODO: give this a new name
 def revised_k_gram(text, k):
     '''
     This is the k-gram generator algorithm described in the Extended Winnowing Algorithm paper that accompanies this
-    source code.
+    source code. This takes in a piece of text and an integer k that represents how long each K-gram is. This outputs
+    the various k-grams as well as their location in the original text. 
+
+    Sample input: "helloworld" , 5 
+
+    Sample Output: [("hello",0) , ("ellow", 1), ("llowo",2), ("lowor",3), ("oworl",4), ("world", 5) ]
 
     Parameters
     ----------
@@ -98,6 +64,8 @@ def revised_k_gram(text, k):
             k_grams.append((hash(k_gram), start))
     return k_grams
 
+
+# TODO: Decide if you want to deprecate this
 def generate_hashes(kgram_list, hash_func=None):
     """
     Parameters
@@ -118,18 +86,50 @@ def generate_hashes(kgram_list, hash_func=None):
     
     if (hash_func is None):
         hash_func = hash
-    
     return [hash(kgram) for kgram in kgram_list]
 
-#TODO: Fill this in
-def rightmost_min(int_list):
-    return
+
+# TODO: check to see you are not off by one 
+def select_fingerprints(hash_list, w):
+    '''
+    Parameters
+    ----------
+    hash_list : list of (int, int)
+    
+    w : int
+        w represents the window size for which we select a rightmost minimum
+    
+    Returns
+    -------
+    fingerprints : list of (int, int)
+    '''
+    fingerprints = []
+    min_index = -1
+    prev_min_index = -1
+    # traverse over the hash_list
+    for hash_index in range(len(hash_list) - w +1):
+        min_value =  float("inf")
+        #traverse over each window
+        for window_index in range(hash_index, hash_index + w ):
+            if hash_list[window_index][0] <= min_value:
+                min_index = window_index
+                min_value = hash_list[window_index][0]
+        # If the minimum value of the previous window is no longer the minimum value
+        if min_index != prev_min_index:
+            prev_min_index = min_index
+            fingerprints.append(hash_list[min_index])
+    return fingerprints
 
 
-def main():
-    some_text = "This is an example of all to all matching"
+def winnow(some_text):
+
+
     print(some_text)
     k_grams = revised_k_gram(some_text, 6)
     print(k_grams)
     print(len(k_grams))
-main()
+    test_fingerprints = select_fingerprints(k_grams, 4)
+    print(test_fingerprints)
+
+winnow("This is an example of all to all matching")
+
