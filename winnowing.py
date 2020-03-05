@@ -1,11 +1,7 @@
-# TODO: find out why doing the triple equals makes things slower
-# TODO: implement rolling hashes
-# TODO: make sure that you remove custom_hash in the revised_k_gram algo
-# TODO: Consider whether or not adding punctuation removal might help
-# TODO: Give revised_k_gram a new name
-
 
 import hashlib
+
+
 class Winnow:
     def __init__(self, text, k, w, use_rolling_hash=False):
         self.text =Winnow.clean_text(text)
@@ -96,7 +92,7 @@ class Winnow:
                     end = end + (self.k - len(k_gram)) # we will need to add as many letters as are missing from the k-gram
                     k_gram = text[start: end]    
                     k_gram = self.clean_text(k_gram)
-                k_grams.append((self.custom_hash(k_gram), start))
+                k_grams.append(self.custom_hash(k_gram))
         return k_grams
 
     def rolling_hash(self,text):
@@ -140,9 +136,9 @@ class Winnow:
             min_value =  float("inf")
             #traverse over each window
             for window_index in range(hash_index, hash_index + w ):
-                if hash_list[window_index][0] <= min_value:
+                if hash_list[window_index] <= min_value:
                     min_index = window_index
-                    min_value = hash_list[window_index][0]
+                    min_value = hash_list[window_index]
             # If the minimum value of the previous window is no longer the minimum value
             if min_index != prev_min_index:
                 prev_min_index = min_index
