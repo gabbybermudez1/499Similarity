@@ -13,7 +13,7 @@ class Winnow:
         if use_rolling_hash == True:
             self.hashes = self.rolling_hash(self.text)
         else:
-            self.hashes = self.revised_k_gram(self.text)
+            self.hashes = self.hash_kgram(self.text)
         self.fingerprints = self.select_fingerprints(self.hashes, self.w)
 
     @staticmethod
@@ -38,7 +38,6 @@ class Winnow:
         cleaned_text= cleaned_text.replace("\n", "") #remove the newline character
         return cleaned_text
 
-    # # TODO: decide if this is deprecated (in favour of rolling hash)
     def custom_hash(self, text):
         text = text.encode('utf-8')
         hs = hashlib.md5(text)
@@ -53,7 +52,7 @@ class Winnow:
             result = (result * 10) + (ord(some_str[i]))
         return result
 
-    def revised_k_gram(self, text):
+    def hash_kgram(self, text):
         '''
         This is the k-gram generator algorithm described in the Extended Winnowing Algorithm paper that accompanies this
         source code. This takes in a piece of text and an integer k that represents how long each K-gram is. This outputs
