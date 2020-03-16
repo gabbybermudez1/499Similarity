@@ -20,13 +20,14 @@ class WinnowedDoc:
         fingerprints will be compared against other document fingerprints to see how similar they are to each other.
     '''
     def __init__(self, text, k, w, use_rolling_hash=False):
-        self.text = Preprocessor.clean_text(text)
-        self.uncleaned_text = text
-        print("Len of uncleaned_text is: ", len(self.uncleaned_text))
-        print("len of cleaned text is: ", len(self.text))
+        self.text = Preprocessor.remove_common_code(Preprocessor.clean_text(text))
+        # print("\n\n=========\n Cleaned Code is" + self.text)
+        # self.uncleaned_text = text
+        # print("Len of uncleaned_text is: ", len(self.uncleaned_text))
+        # print("len of cleaned text is: ", len(self.text))
         self.k = k
         self.w = w
-        if use_rolling_hash == True:
+        if eval(use_rolling_hash) == True:
             self.hashes = self.rolling_hash(self.text)
         else:
             self.hashes = self.hash_kgram(self.text)
@@ -126,9 +127,10 @@ class WinnowedDoc:
         text = str(text)
         next_str = text[0:self.k]
         next_hash = self.horners_rule(next_str)
-        print(next_str)
-        print(next_hash)
-        hashes.append(( next_hash, 0, next_str))
+        # print(next_str)
+        # print(next_hash)
+        # hashes.append(( next_hash, 0, next_str))
+        hashes.append(next_hash)
         for i in range(0, len(text) - self.k):
             current_str = next_str
             current_hash = next_hash
@@ -136,11 +138,14 @@ class WinnowedDoc:
                 # get the new stuff
                 next_str = text[i + 1: self.k + i + 1]
                 next_hash = ((current_hash - (ord(current_str[0]) * E)) * 10) + ord(next_str[self.k - 1])
-                hashes.append((next_hash, i + 1, next_str))
+                # hashes.append((next_hash, i + 1, next_str))
+                hashes.append(next_hash)
         return hashes
 
     def select_fingerprints(self, hash_list, w):
         '''
+        This helper function takes in a  set of 
+
         Parameters
         ----------
         hash_list : list of (int, int)

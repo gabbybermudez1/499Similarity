@@ -1,7 +1,6 @@
 import json
 
 class Preprocessor:
-
     @staticmethod
     def clean_text(text):
         """
@@ -22,15 +21,30 @@ class Preprocessor:
         cleaned_text = text.lower()
         cleaned_text= cleaned_text.replace(" ", "") #remove whitespace
         cleaned_text= cleaned_text.replace("\n", "") #remove the newline character
+        cleaned_text= cleaned_text.replace("\t", "") #remove the newline character
         return cleaned_text
 
     @staticmethod
     def remove_common_code(text):
+        '''
+        Function that removes code or text snippets that are expected in all submissions
+
+        Parameters
+        ----------
+        text : str
+            The student's code that we want to remove common code for 
+
+        Returns
+        -------
+        text: str
+            A cleaned up version of the text with the common parts removed
+        '''
         text = str(text)
         with open("config.json") as config_file:
             cfg = json.load(config_file)
             common_code = cfg["common_code"]
         for code in common_code:
+            code = Preprocessor.clean_text(code)
             text = text.replace(code, "")
         return text
 
