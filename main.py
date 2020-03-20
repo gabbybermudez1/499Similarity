@@ -2,8 +2,7 @@ import os
 import json
 from winnowing import WinnowedDoc
 
-# Reflect this in configurations
-ROOT = "C:/Users/gabby/Documents/School/CISC_499/student_data/subset_students"
+
 
 
 def jaccard_coefficient(doc1_fp, doc2_fp):
@@ -44,6 +43,8 @@ with open("config.json") as cfg_file:
 
 
 # ------ Configurations --------
+# Reflect this in configurations
+ROOT = cfg["root"]
 assignment_name = cfg["assignment_name"]
 assignment_files = cfg["assignment_files"]
 
