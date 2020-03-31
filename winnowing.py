@@ -31,7 +31,7 @@ class WinnowedDoc:
             self.hashes = self.rolling_hash(self.text)
         else:
             self.hashes = self.hash_kgram(self.text)
-        self.fingerprints = self.select_fingerprints(self.hashes, self.w)
+        self.fingerprints = list(set(self.select_fingerprints(self.hashes, self.w)))
 
     def custom_hash(self, text):
         '''

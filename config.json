@@ -1,17 +1,12 @@
-{
-    "k_gram_size": 35,
-    "window_size": 20,
+{   
+    "k_gram_size": 30,
+    "window_size": 22,
     "use_rolling_hash": "False",
     "common_code" : 
     [
-        "Agriculture is a highly multi-disciplinary field; students can expect to study mathematics, biology, chemistry, economics and sociology. It is vital to understand all of the factors that affect food sustainability and ensure or threaten food security.",
-
-        "Agricultural production systems are facing increasing competition from other sectors for limited natural resources. The availability of these resources and their quality are also being affected by unsustainable management practices and changing climatic and weather conditions. To respond to this situation, the agriculture sectors must improve their sustainability performance and adapt to the impacts of climate change in ways that do not compromise global efforts to ensure food security for all. These challenges are intimately and inextricably related, and need to be addressed simultaneously.",
-        "MacGillivray-Brown Hall",
-        "MacGillivray-Brown Hall<br/>  218 Barrie St.<br/>       Kingston, ON<br/>        K7L 3K3<br/>",
-        "<!-- HTML5 outline elements aren't absolutely necessary for all pages. The content here is short and doesn't naturally lend itself to sections. -->"
+        
     ],
-    "assignment_name": "a5",
-    "assignment_files": ["gallery.php"],
-    "root": "C:/Users/gabby/Documents/School/CISC_499/student_data/subset_students"
+    "assignment_name": "a2",
+    "assignment_files": ["about.html", "index.html"],
+    "root": "C:/Users/gabby/Documents/School/CISC_499/student_data/cisc282.2019"
 }

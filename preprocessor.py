@@ -1,11 +1,13 @@
 import json
+import config as cfg
+import re
 
 class Preprocessor:
     @staticmethod
     def clean_text(text):
         """
         Takes in a piece of text and eliminates unnecessary features such as capitalization, trailing or leading 
-        whitespaces, and spaces between words. 
+        whitespaces, and spaces between words. This will also remove URLs
 
         Parameters
         ----------
@@ -18,10 +20,12 @@ class Preprocessor:
             String that is the same as the input text but with the unnecessary features removed.
         """
         text = str(text)
-        cleaned_text = text.lower()
+        cleaned_text = re.sub(r"http\S+", '', text)
+        cleaned_text = cleaned_text.lower()
         cleaned_text= cleaned_text.replace(" ", "") #remove whitespace
         cleaned_text= cleaned_text.replace("\n", "") #remove the newline character
         cleaned_text= cleaned_text.replace("\t", "") #remove the newline character
+       
         return cleaned_text
 
     @staticmethod
@@ -40,9 +44,9 @@ class Preprocessor:
             A cleaned up version of the text with the common parts removed
         '''
         text = str(text)
-        with open("config.json") as config_file:
-            cfg = json.load(config_file)
-            common_code = cfg["common_code"]
+        # with open("config.json") as config_file:
+        #     cfg = json.load(config_file)
+        common_code = cfg.cfg["common_code"]
         for code in common_code:
             code = Preprocessor.clean_text(code)
             text = text.replace(code, "")

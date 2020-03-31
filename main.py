@@ -1,16 +1,19 @@
 import os
-import json
+# import json
 from winnowing import WinnowedDoc
+import config as cfg
 
 
 
-
+# helper function that computes the similarity between two arrays
 def jaccard_coefficient(doc1_fp, doc2_fp):
     intersection = [fingerprint for fingerprint in doc1_fp if fingerprint in doc2_fp]
     intersection = len(intersection)
     # union = len(doc1_fp) + len(doc2_fp) - intersection
     denominator = min(len(doc1_fp) , len(doc2_fp) )
-    return (intersection / denominator) * 100
+    similarity = (intersection / denominator) * 100
+    similarity = round(similarity, 2)
+    return similarity
 
 
 def return_file_location(filename, directory):
@@ -38,26 +41,23 @@ def return_file_location(filename, directory):
             return path
 
 
-with open("config.json") as cfg_file:
-    cfg = json.load(cfg_file)
+# with open("config.json") as cfg_file:
+#     cfg = json.load(cfg_file)
 
 
 # ------ Configurations --------
 # Reflect this in configurations
-ROOT = cfg["root"]
-assignment_name = cfg["assignment_name"]
-assignment_files = cfg["assignment_files"]
+ROOT = cfg.cfg["root"]
+assignment_name = cfg.cfg["assignment_name"]
+assignment_files = cfg.cfg["assignment_files"]
 
-k_gram_size = cfg["k_gram_size"]
-window_size = cfg["window_size"]
-use_rolling = cfg["use_rolling_hash"]
+k_gram_size = cfg.cfg["k_gram_size"]
+window_size = cfg.cfg["window_size"]
+use_rolling = cfg.cfg["use_rolling_hash"]
 
 students = os.listdir(ROOT)
 
-
-
 all_submissions = {}
-
 
 def generate_fingerprints_all():
     for net_id in students:
@@ -77,9 +77,9 @@ print("--- Generated Fingerprints ---")
 # # Compare all fingerprints
 with open("similarity_report.txt", "w") as similarity_report:
     for file in assignment_files:
-        similarity_report.write("\n========================\n")
+        similarity_report.write("\n-----------------------\n")
         similarity_report.write(file + "\n")
-        similarity_report.write("========================\n")
+        similarity_report.write("-----------------------\n")
         for i in range(len(students)):
             for j in range(i + 1, len(students)):
                 if (all_submissions[students[i]].get(file) is not None) and (all_submissions[students[j]].get(file) is not None ):
@@ -96,6 +96,3 @@ with open("similarity_report.txt", "w") as similarity_report:
 
 
 
-# if(15 < similarity):
-#     with open("similarity_report.txt", "w") as similarity_report:
-#         similarity_report.write("This was plagiarised. Similarity rating was: " + str(similarity))
