@@ -27,7 +27,7 @@ class WinnowedDoc:
         # print("len of cleaned text is: ", len(self.text))
         self.k = k
         self.w = w
-        if eval(use_rolling_hash) == True:
+        if use_rolling_hash == True:
             self.hashes = self.rolling_hash(self.text)
         else:
             self.hashes = self.hash_kgram(self.text)

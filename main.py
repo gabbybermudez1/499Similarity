@@ -1,15 +1,13 @@
 import os
-# import json
 from winnowing import WinnowedDoc
-import config as cfg
-
+from config import *
+import time
 
 
 # helper function that computes the similarity between two arrays
 def jaccard_coefficient(doc1_fp, doc2_fp):
     intersection = [fingerprint for fingerprint in doc1_fp if fingerprint in doc2_fp]
     intersection = len(intersection)
-    # union = len(doc1_fp) + len(doc2_fp) - intersection
     denominator = min(len(doc1_fp) , len(doc2_fp) )
     similarity = (intersection / denominator) * 100
     similarity = round(similarity, 2)
@@ -40,25 +38,6 @@ def return_file_location(filename, directory):
             path = os.path.join(current_dir, filename).replace("\\", "/")
             return path
 
-
-# with open("config.json") as cfg_file:
-#     cfg = json.load(cfg_file)
-
-
-# ------ Configurations --------
-# Reflect this in configurations
-ROOT = cfg.cfg["root"]
-assignment_name = cfg.cfg["assignment_name"]
-assignment_files = cfg.cfg["assignment_files"]
-
-k_gram_size = cfg.cfg["k_gram_size"]
-window_size = cfg.cfg["window_size"]
-use_rolling = cfg.cfg["use_rolling_hash"]
-
-students = os.listdir(ROOT)
-
-all_submissions = {}
-
 def generate_fingerprints_all():
     for net_id in students:
         all_submissions[net_id] = {}
@@ -70,10 +49,29 @@ def generate_fingerprints_all():
                     contents = document.read()
                 all_submissions[net_id][assignment_file] = WinnowedDoc(contents, k_gram_size, window_size, use_rolling).fingerprints
 
+
+
+# ------ Configurations --------
+
+# System Configurations
+ROOT = system_cfg["root"]
+assignment_name = system_cfg["assignment_name"]
+assignment_files = system_cfg["assignment_files"]
+
+
+# Algorithmic Parameters
+k_gram_size = algorithm_cfg["k_gram_size"]
+window_size = algorithm_cfg["window_size"]
+use_rolling = algorithm_cfg["use_rolling_hash"]
+
+students = os.listdir(ROOT)
+
+all_submissions = {}
+
+start_time = time.time()
+
 generate_fingerprints_all()
 print("--- Generated Fingerprints ---")
-
-
 # # Compare all fingerprints
 with open("similarity_report.txt", "w") as similarity_report:
     for file in assignment_files:
@@ -87,7 +85,8 @@ with open("similarity_report.txt", "w") as similarity_report:
                     if 25.0 < similarity:
                         similarity_report.write("Student " + students[i] + " and  Student " + students[j] + " have a similarity score of " + str(similarity) + "\n")
 
-
+elapsed_time = time.time() - start_time
+print("--- Algorithm took ", elapsed_time , "s to run ---")
 
 
 
