@@ -1,13 +1,16 @@
+# Parameters associated with 
 algorithm_cfg = {   
-    "k_gram_size": 15,
-    "window_size": 8,
+    "k_gram_size": 25,
+    "window_size": 14,
     "use_rolling_hash": False
 }
 
-
+# Parameters related to the assignments, where they are located, and the code that should be removed 
 system_cfg = {
     "root": "C:/Users/gabby/Documents/School/CISC_499/student_data/cisc282.2019",
     "assignment_name" : "a2",
-    "assignment_files" : ["styles.css"],
-    "sample_solution" : "C:/Users/gabby/Documents/School/CISC_499/499Similarity/test_cases/282_tests/style_samplesol.css"
+    "assignment_files" : ["index.html"],
+    "sample_solution" : "C:/Users/gabby/Documents/School/CISC_499/backups/test_cases/282_tests/a1sample_index.html",
+    "similarity_threshold": 27
 }
+

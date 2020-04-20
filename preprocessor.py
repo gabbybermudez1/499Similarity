@@ -1,7 +1,7 @@
 import json 
 import re
 
-from config import *
+from config import system_cfg
 
 class Preprocessor:
     @staticmethod
@@ -31,35 +31,25 @@ class Preprocessor:
             cleaned_text = cleaned_text.replace(punctuation_mark, "")
         return cleaned_text
 
-    # @staticmethod
-    # def remove_common_code(text):
-    #     '''
-    #     Function that removes code or text snippets that are expected in all submissions
-
-    #     Parameters
-    #     ----------
-    #     text : str
-    #         The student's code that we want to remove common code for 
-
-    #     Returns
-    #     -------
-    #     text: str
-    #         A cleaned up version of the text with the common parts removed
-    #     '''
-    #     text = str(text) # explicit type casting 
-    #     common_code = cfg["common_code"] # find all the pieces of text we should remove
-    #     for code in common_code:
-    #         code = Preprocessor.clean_text(code)
-    #         text = text.replace(code, "")
-    #     return text
-
     @staticmethod
     def remove_common_code(text):
         '''
-        Function that removes common text and common code from 
-        '''
+        This function removes code that is expected to be in all assignments. This function reads in the sample solution 
+        files specified in the config.py line-by-line and removes each of the lines from the text
 
+        Parameters
+        ----------
+        text : str
+            This is the string that we want to remove common code from
+        
+        Returns
+        -------
+        text : str
+            the parameter text after removing all of the common text
+        '''
         text = str(text) # explicit type casting 
+
+
         sample_submission = system_cfg["sample_solution"]
         with open(sample_submission) as sample_submission_file:
             contents = sample_submission_file.readlines()

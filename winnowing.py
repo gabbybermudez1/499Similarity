@@ -21,10 +21,6 @@ class WinnowedDoc:
     '''
     def __init__(self, text, k, w, use_rolling_hash=False):
         self.text = Preprocessor.remove_common_code(Preprocessor.clean_text(text))
-        # print("\n\n=========\n Cleaned Code is" + self.text)
-        # self.uncleaned_text = text
-        # print("Len of uncleaned_text is: ", len(self.uncleaned_text))
-        # print("len of cleaned text is: ", len(self.text))
         self.k = k
         self.w = w
         if use_rolling_hash == True:
@@ -82,11 +78,10 @@ class WinnowedDoc:
             This represents how big our k-gram is 
 
         Returns
-            k_grams : list of typles (int, int)
-                This represents a list of tuples.
         -------
+            k_grams : list of tuples (int, int)
+                This represents a list of tuples.
         '''
-        print("--- Using MD5 Hashing ---")
         # Explicit type casting to ensure proper behaviour
         text = str(text)
         k_grams = []
@@ -121,15 +116,11 @@ class WinnowedDoc:
         hashes: list of int
             A list of all hashed k-grams
         '''
-        print("--- Using Rolling Hash ---")
         hashes= []
         E = 10 **(self.k - 1)
         text = str(text)
         next_str = text[0:self.k]
         next_hash = self.horners_rule(next_str)
-        # print(next_str)
-        # print(next_hash)
-        # hashes.append(( next_hash, 0, next_str))
         hashes.append(next_hash)
         for i in range(0, len(text) - self.k):
             current_str = next_str
